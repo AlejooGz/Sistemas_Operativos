@@ -1,0 +1,17 @@
+1.  Llamadas al sistema:
+- sem_open():
+- sem_ post():
+- sem_wait():
+- sem_close():
+- sem_unlink():
+
+- shm_open():
+- ftruncate():
+- mmap():
+- shm_unlink():
+
+- mq_open():
+- mq_ send():
+- mq_recive():
+- mq_close():
+- mq_unlink():
