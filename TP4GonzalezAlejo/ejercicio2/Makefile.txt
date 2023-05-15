@@ -1,0 +1,19 @@
+all: cliente servidor
+
+cliente: cliente.o comunicaciones.o hardware.o
+    gcc -Wall -Wextra -o cliente cliente.o comunicaciones.o hardware.o
+
+servidor: servidor.o comunicaciones.o hardware.o
+    gcc -Wall -Wextra -o servidor servidor.o comunicaciones.o hardware.o
+
+cliente.o: cliente.c cliente.h interfaz.h comunicaciones.h
+    gcc -Wall -Wextra -c cliente.c
+
+servidor.o: servidor.c servidor.h interfaz.h comunicaciones.h
+    gcc -Wall -Wextra -c servidor.c
+
+comunicaciones.o: comunicaciones.c comunicaciones.h hardware.h
+    gcc -Wall -Wextra -c comunicaciones.c
+
+hardware.o: hardware.c hardware.h
+    gcc -Wall -Wextra -c hardware.c
