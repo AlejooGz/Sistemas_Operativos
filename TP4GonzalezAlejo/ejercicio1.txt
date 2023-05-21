@@ -1,28 +1,42 @@
 1.  Llamadas al sistema:
-sem_open(): Crea o abre un semáforo compartido por procesos y devuelve un descriptor de archivo. Se utiliza para sincronizar procesos y para controlar el acceso a recursos compartidos.
+sem_open(): Crea o abre un semáforo compartido por procesos e identificado por un nombre. Devuelve la direccion del semaforo de 
+ejecutarse exitosamente,  SEM_FAILED sino.
 
-sem_post(): Incrementa el valor de un semáforo previamente creado con sem_open(). Si hay procesos esperando en la cola de espera del semáforo, se desbloquea uno de ellos.
+sem_post(): Incrementa (desbloquea) un semáforo. Si hay procesos bloqueados en un sem_wait(), se desbloquea uno de ellos. Devuelve
+0 en caso de ejecutarse exitosamente, -1 sino.
 
-sem_wait(): Decrementa el valor de un semáforo previamente creado con sem_open(). Si el valor del semáforo es 0, el proceso se bloquea hasta que el semáforo se libera con sem_post().
+sem_wait(): Decrementa un semaforo. Si el valor del semaforo es mayor a 0, se decrementa y retorna inmediatamente. Si el valor del 
+semáforo es 0, el proceso se bloquea hasta que sea posible decrementar (por ejemplo, con el sem_post() de otro proceso). Devuelve
+0 en caso de ejecutarse exitosamente, -1 sino.
 
-sem_close(): Cierra un semáforo previamente creado con sem_open(). Libera los recursos asociados con el semáforo.
+sem_close(): Cierra un semáforo. Libera todos los recursos que el proceso tenga asociados al semáforo. Devuelve 0 en caso de ejecutarse
+exitosamente, -1 sino.
 
-sem_unlink(): Elimina un semáforo previamente creado con sem_open(). Después de llamar a esta función, el semáforo ya no está disponible para los procesos que lo usan.
+sem_unlink(): Elimina un semaforo. El semaforo es destruido una vez que todos los procesos que lo tenian abierto lo cierren. Devuelve 0 
+en caso de ejecutarse exitosamente, -1 sino.
 
-shm_open(): Crea o abre un objeto de memoria compartida, devolviendo un descriptor de archivo que se puede usar para acceder a la memoria compartida.
+
+shm_open(): Crea o abre un objeto de memoria compartida, devolviendo un descriptor de archivo que se puede usar para 
+acceder a la memoria compartida.
 
 ftruncate(): Redimensiona un archivo a un tamaño específico.
 
-mmap(): Asocia un objeto de memoria compartida creado con shm_open() con el espacio de direcciones del proceso. Devuelve un puntero al inicio de la memoria compartida.
+mmap(): Asocia un objeto de memoria compartida creado con shm_open() con el espacio de direcciones del proceso. 
+Devuelve un puntero al inicio de la memoria compartida.
 
-shm_unlink(): Elimina un objeto de memoria compartida creado con shm_open(). Después de llamar a esta función, la memoria compartida ya no está disponible para los procesos que la usan.
+shm_unlink(): Elimina un objeto de memoria compartida creado con shm_open(). Después de llamar a esta función, la memoria 
+compartida ya no está disponible para los procesos que la usan.
 
-mq_open(): Crea o abre una cola de mensajes compartida por procesos. Devuelve un descriptor de archivo que se puede usar para enviar o recibir mensajes en la cola.
+
+mq_open(): Crea o abre una cola de mensajes compartida por procesos. Devuelve un descriptor de archivo que se puede usar 
+para enviar o recibir mensajes en la cola.
 
 mq_send(): Envía un mensaje a la cola de mensajes previamente creada con mq_open().
 
-mq_receive(): Recibe un mensaje de la cola de mensajes previamente creada con mq_open(). Si no hay mensajes en la cola, el proceso se bloquea hasta que llegue un mensaje.
+mq_receive(): Recibe un mensaje de la cola de mensajes previamente creada con mq_open(). Si no hay mensajes en la cola, el 
+proceso se bloquea hasta que llegue un mensaje.
 
 mq_close(): Cierra una cola de mensajes previamente creada con mq_open(). Libera los recursos asociados con la cola.
 
-mq_unlink(): Elimina una cola de mensajes previamente creada con mq_open(). Después de llamar a esta función, la cola de mensajes ya no está disponible para los procesos que la usan.
+mq_unlink(): Elimina una cola de mensajes previamente creada con mq_open(). Después de llamar a esta función, la cola de 
+mensajes ya no está disponible para los procesos que la usan.

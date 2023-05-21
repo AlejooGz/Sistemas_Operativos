@@ -1,0 +1,95 @@
+a) La unidad select() sirve para monitorear multiples descriptores de archivos, esperando hasta que uno o mas de esos descriptores 
+se vuelvan "listos" para alguna clase de operacion E/S.
+
+b) (Ver codigo de servidor.c)
+
+c) Secuencia de funciones necesarias para establecer una conexion entre un cliente y un servidor:
+Desde el lado del cliente:
+	1. Imprtar bibliotecas necesarias:
+		#include <stdio.h>
+		#include <stdlib>
+		#include <string.h>
+		#include <sys/socket.h>
+		#include <arpa/inet.h>
+	
+	2. Crear un socket:
+		int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+		if(sockfd == -1)
+		{
+			perror("Error al crear el socket");
+			exit(EXIT_FAILURE);
+		}
+
+	3. Definir la direccion del servidor:
+		struct sockaddr_in server_addr;
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(numero_puerto);
+		server_addr.sin_addr.s_addr = inet_addr("direccion_ip_servidor");
+	
+	4. Conectar con el servidor:
+		int connect_result = connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
+		if(connect_result == -1)
+		{
+			perror("Error al conectar con el servidor");
+			exit(EXIT_FAILURE);
+		}
+
+	5. Enviar datos al servidor:
+		char mensaje[100];
+		strcpy(mensaje,"Hola servidor!");
+		int send_result = send(sockfd, mensaje, strlen(mensaje), 0);
+		if(send_result == -1)
+		{
+			perror("Error al enviar datos al servidor");
+			exit(EXIT_FAILURE);
+		}
+
+	6. Recibir datos del servidor:
+		char buffer[100];
+		int recv_result = recv(sockfd, buffer, sizeof(buffer), 0):
+		if(recv_result == -1)
+		{
+			perror("Error al recibir datos del servidor");
+			exit(EXIT_FAILURE);
+		}
+		buffer[recv_result] = '\0'; //Agrega el caracter nulo al final del buffer
+		printf("Respuesta del servidor: %s\n", buffer);
+
+	7. Cerrar la conexion:
+		close(sockfd);
+
+
+Desde el lado del servidor:
+	1. Imprtar bibliotecas necesarias:
+		#include <stdio.h>
+		#include <stdlib>
+		#include <string.h>
+		#include <sys/socket.h>
+		#include <arpa/inet.h>
+	
+	2. Crear un socket:
+		int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+		if(sockfd == -1)
+		{
+			perror("Error al crear el socket");
+			exit(EXIT_FAILURE);
+		}
+
+	3. Definir la direccion del servidor:
+		struct sockaddr_in server_addr;
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(numero_puerto);
+		server_addr.sin_addr.s_addr = INADDR_ANY;
+
+	4. Conectar con el servidor:
+		int bind_result = bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
+		if(bind_result == -1)
+		{
+			perror("Error al vincular el socket");
+			exit(EXIT_FAILURE);
+		}
+
+	5. Escuchar por conexiones entrantes:
+		int listen_result = listen(sockfd, 5);  //Permite hasta 5 conexiones en espera
+		if(listen_result == -1)
+			perror("Error al escuchar por conexiones entrantes"");
