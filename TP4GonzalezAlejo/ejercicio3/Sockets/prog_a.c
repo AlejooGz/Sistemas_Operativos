@@ -1,62 +1,67 @@
 /*
-    cliente
+    Cliente
 */
-#include <stdio.h> //printf
-#include <string.h>    //strlen
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <sys/socket.h>    //socket
-#include <arpa/inet.h> //inet_addr
- 
+#include <sys/un.h>    //socket
+//#include <arpa/inet.h> //inet_addr
+
+#define PATH "/tmp/DemoSocket"
+
 int main(int argc , char *argv[])
 {
-    int sock;
-    struct sockaddr_in server;
-    char message[1000] , server_reply[2000];
-     
-    //Crea socket
-    sock = socket(AF_INET , SOCK_STREAM , 0);
-    if (sock == -1)
-    {
-        printf("No se pudo crear socket");
-    }
-    puts("Socket creado");
-     
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server.sin_family = AF_INET;
-    server.sin_port = htons( 8888 );
- 
-    //Conecto a servidor remoto
-    if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        perror("Conexión fallida. Error");
-        return 1;
-    }
-     
-    puts("Conectado...! \n");
-     
-    //mantengo comunicación
+	int sock;
+	struct sockaddr_un server;
+	char message[1000] , server_reply[2000];
+
+	//unlink(PATH);
+
+	//Creo el socket
+    	if ((sock = socket(AF_UNIX , SOCK_STREAM , 0)) < 0)
+    	{
+        	perror("Error al crear socket");
+		exit(EXIT_FAILURE);
+    	}
+    	puts("Socket creado\n");
+
+	//Prepara estructura sockaddr_un
+    	server.sun_family = AF_UNIX;
+    	//server.sun_path = PATH;
+	strncpy(server.sun_path, PATH, strlen(PATH));
+
+    	//Conecto al servidor
+    	if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
+    	{
+        	perror("Error al conectar con el servidor");
+        	exit(EXIT_FAILURE);
+    	}
+
+    	puts("Conectado...! \n");
+
+    	//mantengo comunicación
 	while(1)
-    {
-        printf("Ingresar mensaje: ");
-        scanf("%s" , message);
-         
-        //envio la data
-        if( send(sock , message , strlen(message) , 0) < 0)
-        {
-            puts("Envio fallido");
-            return 1;
-        }
-         
-        //Recibo respuesta
-        if( recv(sock , server_reply , 2000 , 0) < 0)
-        {
-            puts("recv fallido");
-            break;
-        }
-         
-        puts("Respuesta del servidor: ");
-        puts(server_reply);
-    }
-     
-    close(sock);
-    return 0;
+    	{
+        	printf("Ingrese un mensaje: \n");
+        	//scanf("%s\n", message);
+		//fflush(stdin);
+		//fgets(message, strlen(message), stdin);
+		gets(message);
+
+		if((strlen(message)) == 0)
+		{
+			return 0;
+		}
+		else if( send(sock , message , strlen(message) , 0) < 0)
+        	{
+            		puts("Error al enviar");
+            		exit(EXIT_FAILURE);
+        	}
+    	}
+
+    	close(sock);
+    	return 0;
 }

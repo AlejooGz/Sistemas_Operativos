@@ -1,31 +1,30 @@
 1.  Llamadas al sistema:
 sem_open(): Crea o abre un semáforo compartido por procesos e identificado por un nombre. Devuelve la direccion del semaforo de 
-ejecutarse exitosamente,  SEM_FAILED sino.
+ejecutarse exitosamente,  SEM_FAILED si no.
 
 sem_post(): Incrementa (desbloquea) un semáforo. Si hay procesos bloqueados en un sem_wait(), se desbloquea uno de ellos. Devuelve
-0 en caso de ejecutarse exitosamente, -1 sino.
+0 en caso de ejecutarse exitosamente, -1 si no.
 
 sem_wait(): Decrementa un semaforo. Si el valor del semaforo es mayor a 0, se decrementa y retorna inmediatamente. Si el valor del 
 semáforo es 0, el proceso se bloquea hasta que sea posible decrementar (por ejemplo, con el sem_post() de otro proceso). Devuelve
-0 en caso de ejecutarse exitosamente, -1 sino.
+0 en caso de ejecutarse exitosamente, -1 si no.
 
 sem_close(): Cierra un semáforo. Libera todos los recursos que el proceso tenga asociados al semáforo. Devuelve 0 en caso de ejecutarse
 exitosamente, -1 sino.
 
 sem_unlink(): Elimina un semaforo. El semaforo es destruido una vez que todos los procesos que lo tenian abierto lo cierren. Devuelve 0 
-en caso de ejecutarse exitosamente, -1 sino.
+en caso de ejecutarse exitosamente, -1 si no.
 
 
-shm_open(): Crea o abre un objeto de memoria compartida, devolviendo un descriptor de archivo que se puede usar para 
-acceder a la memoria compartida.
+shm_open(): Crea y abre un objeto de memoria compartida, o abre uno existente. Devuelve un descriptor de archivo de ejecutarse
+exitosamente,-1 si no.
 
-ftruncate(): Redimensiona un archivo a un tamaño específico.
+ftruncate(): Redimensiona un archivo a un tamaño específico de bytes. Devuelve 0 en caso de ejecutarse exitosamente, -1 si no.
 
-mmap(): Asocia un objeto de memoria compartida creado con shm_open() con el espacio de direcciones del proceso. 
-Devuelve un puntero al inicio de la memoria compartida.
+mmap(): Asocia (mapea) un objeto de memoria compartida creado con el espacio virtual de direcciones del proceso. Devuelve un 
+puntero al area mepeada de ejecutarse exitosamente, MAP_FAILED si no.
 
-shm_unlink(): Elimina un objeto de memoria compartida creado con shm_open(). Después de llamar a esta función, la memoria 
-compartida ya no está disponible para los procesos que la usan.
+shm_unlink(): Elimina un objeto de memoria compartida creado con shm_open(). Devuelve 0 en caso de ejecutarse exitosamente, -1 si no.
 
 
 mq_open(): Crea o abre una cola de mensajes compartida por procesos. Devuelve un descriptor de archivo que se puede usar 

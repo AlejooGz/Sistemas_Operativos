@@ -1,14 +1,14 @@
 /*
- * Cliente
+ * Servidor
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/mman.h>					//shm_open y mmap
+#include <sys/mman.h>								//shm_open y mmap
 #include <sys/stat.h>       /* Constantes de modo */ 	//shm_open
-#include <fcntl.h>          /* Constantes O_* */	//shm_open
-#include <unistd.h>	//ftruencate
+#include <fcntl.h>           	/* Constantes O_* */		//shm_open
+#include <unistd.h>		//ftruencate
 #include <sys/types.h>	//ftruencate
 #include <semaphore.h>
 
@@ -17,7 +17,6 @@
 int main(void)
 {
 	int shm_fd;
-	//char buf[MAX_MSG];
 	char *data;
 	sem_t *sem1, *sem2;
 
@@ -46,10 +45,9 @@ int main(void)
 
 	while(1)
 	{
-		sem_wait(sem1);
-		printf("Ingrese un mensaje:\n");
-		gets(data);
-		sem_post(sem2);
+		sem_wait(sem2);
+		printf("data = %s\n", data);
+		sem_post(sem1);
 	}
 
 	sem_close(sem1);

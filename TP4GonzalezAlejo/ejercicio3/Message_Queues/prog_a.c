@@ -1,25 +1,35 @@
+/*
+* Cliente
+*/
+
 #include "commons.h"
 
-int main(){
-  
-   char * mensaje="HOLA MUNDO\0";
+
+int main()
+{  
+   	char *mensaje;
+	
 	mq_atributos.mq_flags = 0;
-   mq_atributos.mq_maxmsg = 1;
+  	mq_atributos.mq_maxmsg = 1;
   	mq_atributos.mq_msgsize = sizeof(char)*strlen(mensaje); 
-   mq_atributos.mq_curmsgs = 1;
+   	mq_atributos.mq_curmsgs = 1;
+	
+	mqd = mq_open("/mq_ejercicio3", O_CREAT | O_RDWR, 0666, &mq_atributos);		
 
-	mqd = mq_open("/mq_ejemplo", O_CREAT | O_RDWR, 0666, &mq_atributos);		
-
-	if(mqd == (mqd_t) -1){
-		perror("mq_open");
+	if(mqd == -1)	//(mqd_t)
+	{
+		perror("Error en mq_open");
 		exit (-1);
 	}
 
-  	if(mq_send(mqd, mensaje, mq_atributos.mq_msgsize, 1) == -1)
-		perror("mq_send");
+	printf("Ingrese un mensaje:\n");
+	gets(mensaje);
 
-   return 0;
-   
-   mq_close(mqd);
-   mq_unlink("/mq_ejemplo");
+  	if(mq_send(mqd, mensaje, mq_atributos.mq_msgsize, 1) == -1)
+		perror("Error en mq_send");
+
+	mq_close(mqd);
+   	mq_unlink("/mq_ejercicio3");
+
+   	return 0;
 }
