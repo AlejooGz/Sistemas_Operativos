@@ -8,15 +8,15 @@
 #include <errno.h>
 #include <sys/socket.h>    //socket
 #include <sys/un.h>    //socket
-//#include <arpa/inet.h> //inet_addr
 
 #define PATH "/tmp/DemoSocket"
+#define MAX_MSG 1000
 
 int main(int argc , char *argv[])
 {
-	int sock;
+	int sock, len_msg, ant_msg = 0;
 	struct sockaddr_un server;
-	char message[1000] , server_reply[2000];
+	char message[MAX_MSG];
 
 	//unlink(PATH);
 
@@ -26,11 +26,11 @@ int main(int argc , char *argv[])
         	perror("Error al crear socket");
 		exit(EXIT_FAILURE);
     	}
+
     	puts("Socket creado\n");
 
 	//Prepara estructura sockaddr_un
     	server.sun_family = AF_UNIX;
-    	//server.sun_path = PATH;
 	strncpy(server.sun_path, PATH, strlen(PATH));
 
     	//Conecto al servidor
@@ -46,12 +46,11 @@ int main(int argc , char *argv[])
 	while(1)
     	{
         	printf("Ingrese un mensaje: \n");
-        	//scanf("%s\n", message);
 		//fflush(stdin);
-		//fgets(message, strlen(message), stdin);
+		//fgets(message, stdin);
 		gets(message);
 
-		if((strlen(message)) == 0)
+		if(strlen(message) == 0)
 		{
 			return 0;
 		}

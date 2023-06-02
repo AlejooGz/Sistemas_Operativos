@@ -50,6 +50,8 @@ int main(void)
 		printf("Ingrese un mensaje:\n");
 		gets(data);
 		sem_post(sem2);
+		if(strlen(data)== 0)
+			return 0;
 	}
 
 	sem_close(sem1);

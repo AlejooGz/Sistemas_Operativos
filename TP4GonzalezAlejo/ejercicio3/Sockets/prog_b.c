@@ -8,16 +8,14 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-//#include <arpa/inet.h> //inet_addr
-//#include <unistd.h>
 
 #define PATH "/tmp/DemoSocket"
-
+#define MAX_MSG 2000
 int main(int argc , char *argv[])
 {
     	int server_sock , client_sock , c , read_size;
     	struct sockaddr_un server , client;
-    	char client_message[2000];
+    	char client_message[MAX_MSG];
 
 	unlink(PATH);
 
@@ -32,7 +30,6 @@ int main(int argc , char *argv[])
 
     	//Prepara estructura sockaddr_un
     	server.sun_family = AF_UNIX;
-    	//server.sun_path = PATH;
 	strncpy(server.sun_path, PATH, strlen(PATH));
 
     	//Bindeo
@@ -66,7 +63,7 @@ int main(int argc , char *argv[])
    	puts("Conexión aceptada");
 
     	//Recibo un mensaje de un cliente
-    	while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
+    	while( (read_size = recv(client_sock , client_message , MAX_MSG , 0)) > 0 )
         	printf("Recibí de un cliente: %s\n", client_message);	//muestro el mensaje por la salida estandar
 
     	if(read_size == 0)

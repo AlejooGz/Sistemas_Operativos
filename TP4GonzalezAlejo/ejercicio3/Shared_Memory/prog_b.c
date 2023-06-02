@@ -46,6 +46,8 @@ int main(void)
 	while(1)
 	{
 		sem_wait(sem2);
+		if(strlen(data)== 0)
+			return 0;
 		printf("data = %s\n", data);
 		sem_post(sem1);
 	}

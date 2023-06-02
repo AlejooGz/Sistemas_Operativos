@@ -2,7 +2,7 @@
 * Servidor
 */
 
-#define SIZE 10
+#define SIZE 8192
 #include "commons.h"
 
 int main()
@@ -14,18 +14,24 @@ int main()
    	mq_atributos.mq_msgsize = sizeof(char)*SIZE;
    	mq_atributos.mq_curmsgs = 1;
    
-   	mqd = mq_open("/mq_ejercicio3", O_RDONLY, 0666, &mq_atributos);
+   	mqd = mq_open("/mq_ejercicio3", O_CREAT | O_RDONLY, 0666, &mq_atributos);
 
    	if(mqd == (mqd_t) -1)
 	{
       		perror("Error en mq_open");
       		exit (-1);
    	}
-   
-   	if(mq_receive(mqd, msg, SIZE,NULL) == -1)
-      		perror("Error en mq_receive");
-   
-   	printf("%s\n", msg);
+
+	while(1)
+	{
+		if(mq_receive(mqd, msg, SIZE,NULL) == -1)
+      			perror("Error en mq_receive");
+
+		if(strlen(msg) == 0)
+			return 0;
+
+		printf("%s\n", msg);
+	}
 
    	mq_close(mqd);
    	//mq_unlink("/mq_ejercicio3");
