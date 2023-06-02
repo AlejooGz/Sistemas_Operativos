@@ -4,68 +4,71 @@ conjunto de herramientas de codigo abierto que permiten realizar comnicaciones u
 
 
 2) Comando para instalar el cliente y servidor de OpenSSH
-sudo apt-get install openssh-server openssh-client
+	sudo apt-get install openssh-server openssh-client
 
 
 3) Comando para iniciar el servidor SSH:
-	- sudo /etc/init.d/ssh start
+	sudo /etc/init.d/ssh start
 Verificar status (comprobar que escucha conecciones remotas):
-	- sudo systemctl status ssh
+	sudo systemctl status ssh
 Parar el servicio:
-	- sudo /etc/init.d/ssh stop
+	sudo /etc/init.d/ssh stop
 
 
 4) Dentro de "/etc/ssh/sshd_config" buscamos el campo "PermitRootLogin" (si no esta, lo creamos) y lo seteamos a "no", quedando de la siguiente manera:
-PermitRootLogin no
+	PermitRootLogin no
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 
 
 5) Dentro de "/etc/ssh/sshd_config" buscamos el campo "AllowUsers" (si no esta, lo creamos) y lo seteamos a "no", quedando de la siguiente manera:
-AllowUsers alejoogz   (permite que se conecte solamente el usuario alejoogz)
+	AllowUsers alejoogz   (permite que se conecte solamente el usuario alejoogz)
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 
 
 6) Dentro de "/etc/ssh/sshd_config" buscamos el campo "Port" (si no esta, lo creamos) y lo seteamos a "10022", quedando de la siguiente manera:
-Port 10022
+	Port 10022
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 Luego, para acceder al nuevo puerto desde consola:
-ssh alejoogz@127.0.0.1 -p 10022
+	ssh alejoogz@127.0.0.1 -p 10022
 
 
 7) Dentro de "/etc/ssh/sshd_config" buscamos el campo "PrintLastLog" (si no esta, lo creamos) y lo seteamos a "no", quedando de la siguiente manera:
-PrintLastLog no
+	PrintLastLog no
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 
 
 8) Dentro de "/etc/ssh/sshd_config" buscamos el campo "X11Forwarding" (si no esta, lo creamos) y lo seteamos a "yes" (ya viene por defecto), quedando 
 de la siguiente manera:
-X11Forwarding yes
+	X11Forwarding yes
 Para comprobar su funcionamiento:
-ssh -X 127.0.0.1 -p 10022
+	ssh -X 127.0.0.1 -p 10022
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 
 
 9) Secuencia de pasos a seguir para configurar el servidor permitiendo autenticaciones de clientes por claves publicas:
 Paso 1: Generar key
-ssh-keygen -t rsa
+	ssh-keygen -t rsa
 Paso 2: Copiar la clave publica a la lista de claves publicas autorizadas del servidor:
- ssh-copy-id alejoogz@127.0.0.1 -p 10022
+	ssh-copy-id alejoogz@127.0.0.1 -p 10022
 Paso 3: Comprobar si se copio correctamente:
-ssh alejoogz@127.0.0.1 -p 10022
+	ssh alejoogz@127.0.0.1 -p 10022
 Y no nos deberia pedir contraseña.
 
 Nota: previamente debe tenerse configurada la opcion para permitir claves publicas dentro del "/etc/ssh/sshd_config":
-PubkeyAuthentication yes
+	PubkeyAuthentication yes
 Guardar cambios con: 
-systemctl restart sshd
+	systemctl restart sshd
 
 
 10) Secuencia de pasos a seguir para conectarse desde un cliente SSH de Windows (Putty) a un servidor de SSH de GNU/Linux:
-Paso 1:
-Paso 2:
-Paso 3:
+Paso 1: Una vez descargado e instalado Putty de su pagina oficial, se deben rellenar los tres campos fundamentales con los datos correspondientes:
+	- Direccion IP del servidor
+	- Puerto que escucha el servidor
+	- Usuario del servidor
+Paso 2: Se le da a Open, y una vez conectados con la terminal del servidor, nos pedira la clave de autentificacion del mismo. Una vez ingresada, ya nos encontramos 
+dentro del servidor.
